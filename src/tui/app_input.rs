@@ -33,14 +33,21 @@ impl AppInput {
             AppMode::Normal => Style::default(),
             AppMode::Editing => Color::Yellow.into(),
             AppMode::Creating => Color::Yellow.into(),
+            AppMode::Detail => Style::default(),
+        };
+        let title = match input_mode {
+            AppMode::Creating => "Nuova spesa (descrizione | importo | DD-MM-YYYY)",
+            AppMode::Editing => "Modifica",
+            AppMode::Normal => "Input",
+            AppMode::Detail => "Dettaglio",
         };
         let input = Paragraph::new(self.input.value())
             .style(style)
             .scroll((0, scroll as u16))
-            .block(Block::bordered().title("Host"));
+            .block(Block::bordered().title(title));
         frame.render_widget(input, area);
 
-        if input_mode == AppMode::Editing {
+        if matches!(input_mode, AppMode::Editing | AppMode::Creating) {
             let x = self.input.visual_cursor().max(scroll) - scroll + 1;
             frame.set_cursor_position((area.x + x as u16, area.y + 1))
         }

@@ -1,11 +1,14 @@
 use crate::{db::expense_repo::ExpenseRepo, models::expense::Expense, tui::app_input::AppInput};
 
+pub mod actions;
+
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub enum AppMode {
     #[default]
     Normal,
     Editing,
     Creating,
+    Detail,
 }
 
 pub struct AppState {
@@ -14,6 +17,8 @@ pub struct AppState {
     pub expenses: Option<Vec<Expense>>,
     pub app_input: AppInput,
     pub app_mode: AppMode,
+    pub status_message: Option<String>,
+    pub detail_idx: Option<usize>,
 }
 
 impl AppState {
@@ -34,6 +39,8 @@ impl AppState {
             app_input: AppInput::default(),
             expenses: first_10_expenses,
             app_mode: AppMode::Normal,
+            status_message: None,
+            detail_idx: None,
         }
     }
     pub fn start_editing(&mut self) {
@@ -41,11 +48,23 @@ impl AppState {
     }
 
     pub fn start_creating(&mut self) {
+        self.app_input = AppInput::default();
+        self.status_message = None;
         self.app_mode = AppMode::Creating
     }
 
     pub fn stop_editing(&mut self) {
         self.app_input = AppInput::default();
+        self.app_mode = AppMode::Normal
+    }
+
+    pub fn start_detail(&mut self, idx: Option<usize>) {
+        self.detail_idx = idx;
+        self.app_mode = AppMode::Detail
+    }
+
+    pub fn stop_detail(&mut self) {
+        self.detail_idx = None;
         self.app_mode = AppMode::Normal
     }
 }
