@@ -1,5 +1,7 @@
 use crate::{db::expense_repo::ExpenseRepo, models::expense::Expense, tui::app_input::AppInput};
 
+pub mod actions;
+
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
 pub enum AppMode {
     #[default]

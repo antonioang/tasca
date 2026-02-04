@@ -13,7 +13,7 @@ use ratatui::{
     crossterm::event,
 };
 
-use crate::{db::expense_repo, tui::{handler, view}};
+use crate::{app_state::actions::AppAction, db::expense_repo, tui::{handler, view}};
 
 fn main() -> Result<()> {
     color_eyre::install()?;
@@ -39,8 +39,8 @@ fn run(mut terminal: DefaultTerminal) -> Result<()> {
         if event::poll(Duration::from_millis(250)).context("event poll failed")? {
             let event = event::read().context("event read failed")?;
             match handler::handle_event(&mut state, &expense_repo, event)? {
-                handler::AppAction::Quit => break,
-                handler::AppAction::None => {}
+                AppAction::Quit => break,
+                AppAction::None => {}
             }
         }
     }

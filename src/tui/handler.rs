@@ -6,14 +6,9 @@ use time::{Date, macros::format_description};
 use tui_input::backend::crossterm::EventHandler;
 
 use crate::{
-    app_state::{AppMode, AppState},
+    app_state::{AppMode, AppState, actions::AppAction},
     db::expense_repo::ExpenseRepo,
 };
-
-pub enum AppAction {
-    None,
-    Quit,
-}
 
 pub fn handle_event(
     state: &mut AppState,
